@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>High-Protein Recipe Book</title>
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1EA; --surface:#FFFFFF; --ink:#1C2317; --muted:#5E6857; --line:#D6DCCF;
+  --zaatar:#3E5B2A; --saffron:#D9A441; --sumac:#A8443B;
+  --chicken:#E0AE3A; --beef:#8E2C34;
+  --t-leb:#DDE9CF; --t-leb-i:#2F4A1C; --t-med:#D5E6EA; --t-med-i:#1E4B57;
+  --t-mex:#F6DEC6; --t-mex-i:#7A3A0E; --t-ita:#F4D6D8; --t-ita-i:#7C2330;
+  --t-ind:#F3E6B8; --t-ind-i:#6A4E07; --t-cla:#E0E3EA; --t-cla-i:#343B4E;
+  --focus:#3E5B2A; --t-thai:#E4DEF3; --t-thai-i:#4A3A78;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141A11; --surface:#1D2519; --ink:#E9EEE3; --muted:#9BA692; --line:#2E3829;
+    --zaatar:#9CC27A; --saffron:#E7B955; --sumac:#E0776B; --chicken:#E7B955; --beef:#D06A6F;
+    --t-leb:#2A3A1F; --t-leb-i:#C4E0A6; --t-med:#1E353B; --t-med-i:#A9D6E0;
+    --t-mex:#3E2A1A; --t-mex-i:#F2C29A; --t-ita:#3D2226; --t-ita-i:#F0B3B9;
+    --t-ind:#3A321A; --t-ind-i:#EBD38A; --t-cla:#262B36; --t-cla-i:#C6CCDA; --focus:#9CC27A; --t-thai:#2C2540; --t-thai-i:#CBBEF0;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141A11; --surface:#1D2519; --ink:#E9EEE3; --muted:#9BA692; --line:#2E3829;
+  --zaatar:#9CC27A; --saffron:#E7B955; --sumac:#E0776B; --chicken:#E7B955; --beef:#D06A6F;
+  --t-leb:#2A3A1F; --t-leb-i:#C4E0A6; --t-med:#1E353B; --t-med-i:#A9D6E0;
+  --t-mex:#3E2A1A; --t-mex-i:#F2C29A; --t-ita:#3D2226; --t-ita-i:#F0B3B9;
+  --t-ind:#3A321A; --t-ind-i:#EBD38A; --t-cla:#262B36; --t-cla-i:#C6CCDA; --focus:#9CC27A; --t-thai:#2C2540; --t-thai-i:#CBBEF0;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-optical-sizing:auto;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:6px}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Header */
+header.top{padding-top:48px;padding-bottom:20px}
+h1{font-size:clamp(2.4rem,7vw,4.2rem);line-height:.95;letter-spacing:-.03em;font-weight:800;margin:0 0 14px;font-variation-settings:"opsz" 96;max-width:12ch}
+.lede{color:var(--muted);font-size:1.05rem;margin:0;max-width:52ch}
+.theme{position:absolute;right:20px;top:calc(20px + env(safe-area-inset-top,0px));background:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.85rem;color:var(--muted);cursor:pointer}
+
+/* Controls */
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:12px 0;border-bottom:1px solid var(--line)}
+.row{display:flex;gap:8px;align-items:center;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.row::-webkit-scrollbar{display:none}
+.row + .row{margin-top:8px}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px;flex:none}
+.seg button{border:0;background:none;padding:6px 14px;border-radius:999px;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.chipbtn-unused{flex:none;border:1px solid transparent;border-radius:999px;padding:6px 12px;font-size:.88rem;font-weight:600;cursor:pointer;opacity:.55;transition:opacity .15s}
+.chipbtn[aria-pressed="true"]{opacity:1;border-color:currentColor}
+.sort{margin-left:auto;flex:none;font:inherit;font-size:.88rem;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 10px}
+
+/* Tags */
+.tag{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:600;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.meat{background:var(--surface);border:1px solid var(--line)}
+.prep{border:1px dashed var(--line);color:var(--muted)}
+.c-Lebanese{background:var(--t-leb);color:var(--t-leb-i)}
+.c-Mediterranean{background:var(--t-med);color:var(--t-med-i)}
+.c-Mexican{background:var(--t-mex);color:var(--t-mex-i)}
+.c-Italian{background:var(--t-ita);color:var(--t-ita-i)}
+.c-Indian{background:var(--t-ind);color:var(--t-ind-i)}
+.c-Thai{background:var(--t-thai);color:var(--t-thai-i)}
+.c-Classic{background:var(--t-cla);color:var(--t-cla-i)}
+
+/* List */
+.list{list-style:none;margin:0;padding:8px 0 64px}
+.item a{display:grid;grid-template-columns:6.2rem 1fr auto;gap:18px;align-items:center;padding:20px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit}
+.item a:hover .name{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.prot{font-size:2.9rem;font-weight:800;letter-spacing:-.04em;line-height:.9;color:var(--zaatar);font-variation-settings:"opsz" 96}
+.prot small{display:block;font-size:.78rem;letter-spacing:0;font-weight:600;color:var(--muted);margin-top:6px}
+.name{font-size:1.2rem;font-weight:700;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.band{display:flex;height:6px;border-radius:3px;overflow:hidden;max-width:280px}
+.band span:nth-child(1){background:var(--zaatar)}.band span:nth-child(2){background:var(--saffron)}.band span:nth-child(3){background:var(--sumac)}
+.kcal{text-align:right;font-weight:700;font-size:1.05rem}
+.kcal .u{font-size:.8rem;font-weight:600;color:var(--muted)}
+.kcal small{display:block;color:var(--muted);font-weight:500;font-size:.8rem}
+.legend{display:flex;gap:14px;font-size:.8rem;color:var(--muted);padding-top:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.empty{padding:48px 0;text-align:center;color:var(--muted)}
+.empty button{margin-top:10px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600}
+@media (max-width:560px){
+  .item a{grid-template-columns:4.4rem 1fr;gap:14px}
+  .prot{font-size:2.2rem}
+  .kcal{grid-column:2;text-align:left;font-size:.95rem}
+  .kcal .u{font-size:.8rem;font-weight:600;color:var(--muted)}
+.kcal small{display:inline;margin-left:4px}
+}
+
+/* Detail */
+.detail{display:none;padding-bottom:80px}
+body.show-detail .detail{display:block}
+body.show-detail .browse{display:none}
+.back{display:inline-flex;align-items:center;gap:6px;margin:24px 0 8px;background:none;border:0;padding:6px 0;color:var(--muted);font-weight:600;cursor:pointer;font-size:.95rem}
+.detail h2{font-size:clamp(2rem,6vw,3.2rem);line-height:1;letter-spacing:-.03em;font-weight:800;margin:8px 0 14px;font-variation-settings:"opsz" 96}
+.dmeta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.dmeta .time{color:var(--muted);font-size:.9rem;margin-left:4px}
+.macros{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;margin:28px 0 10px;border-top:2px solid var(--ink);border-bottom:1px solid var(--line)}
+.macros div{padding:14px 0 12px}
+.macros div + div{padding-left:14px;border-left:1px solid var(--line)}
+.macros b{display:block;font-size:2rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+.macros div:first-child b{font-size:2.6rem;color:var(--zaatar)}
+.macros span{font-size:.82rem;color:var(--muted)}
+.macros .p b{color:var(--zaatar)}
+.detail .band{max-width:none;height:8px;margin-bottom:28px}
+.servings{display:flex;align-items:center;gap:14px;margin:0 0 28px;flex-wrap:wrap}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.stepper button{width:40px;height:40px;border:0;background:none;font-size:1.3rem;cursor:pointer;border-radius:999px}
+.stepper button:disabled{opacity:.3;cursor:default}
+.stepper output{min-width:5.5rem;text-align:center;font-weight:700}
+.servings p{margin:0;color:var(--muted);font-size:.88rem}
+.cols{display:grid;grid-template-columns:1fr 1.25fr;gap:40px}
+@media (max-width:720px){.cols{grid-template-columns:1fr;gap:28px}.macros{grid-template-columns:1fr 1fr}.macros div:nth-child(3){padding-left:0;border-left:0}.macros div:nth-child(n+3){border-top:1px solid var(--line)}}
+h3{font-size:1.1rem;margin:0 0 10px;font-weight:700;display:flex;justify-content:space-between;align-items:baseline}
+h3.sub{margin-top:28px}
+h3 small{font-weight:500;color:var(--muted);font-size:.82rem}
+.checks{list-style:none;margin:0;padding:0}
+.checks li{border-bottom:1px solid var(--line)}
+.checks label{display:flex;gap:12px;padding:11px 0;cursor:pointer;align-items:flex-start}
+.checks input{appearance:none;flex:none;width:20px;height:20px;margin:2px 0 0;border:2px solid var(--line);border-radius:6px;cursor:pointer;display:grid;place-content:center;background:var(--surface)}
+.checks input::after{content:"";width:10px;height:6px;border-left:2px solid var(--bg);border-bottom:2px solid var(--bg);transform:rotate(-45deg) translate(1px,-1px);opacity:0}
+.checks input:checked{background:var(--zaatar);border-color:var(--zaatar)}
+.checks input:checked::after{opacity:1}
+.checks input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.steps label{gap:14px}
+.steps .n{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--ink);display:grid;place-content:center;font-weight:800;font-size:.85rem;transition:background .15s,color .15s}
+.steps input{position:absolute;opacity:0;pointer-events:none}
+.steps input:checked ~ .n{background:var(--zaatar);border-color:var(--zaatar);color:var(--bg)}
+.steps input:checked ~ .txt{color:var(--muted)}
+.steps input:focus-visible ~ .n{outline:2px solid var(--focus);outline-offset:2px}
+.qty{font-weight:700}
+.reset{margin-top:14px;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:4px 0;font-size:.88rem}
+.note{color:var(--muted);font-size:.85rem;margin:40px 0 0;border-top:1px solid var(--line);padding-top:16px;max-width:60ch}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:32px}
+.pager a{color:inherit;text-decoration:none;font-weight:700;max-width:48%}
+.pager a small{display:block;color:var(--muted);font-weight:500;font-size:.8rem}
+.pager a:last-child{text-align:right;margin-left:auto}
+
+@media (prefers-reduced-motion:no-preference){
+  body.show-detail .detail{animation:rise .32s cubic-bezier(.2,.8,.2,1)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+<button class="theme" id="theme" type="button" aria-label="Toggle dark mode">Dark</button>
+
+<div class="browse">
+  <header class="top wrap">
+    <h1>High-Protein Recipe Book</h1>
+    <p class="lede" id="lede">Single-serving high-protein meals. Tap a recipe to scale it and cook along.</p>
+  </header>
+  <div class="controls">
+    <div class="wrap">
+      <div class="row">
+        <div class="seg" role="group" aria-label="Meat">
+          <button type="button" data-meat="all" aria-pressed="true">All</button>
+          <button type="button" data-meat="Chicken" aria-pressed="false">Chicken</button>
+          <button type="button" data-meat="Beef" aria-pressed="false">Beef</button>
+        </div>
+        <select class="sort" id="sort" aria-label="Sort recipes">
+          <option value="order">Book order</option>
+          <option value="p">Most protein</option>
+          <option value="kcal">Fewest calories</option>
+          <option value="ratio">Most protein per kcal</option>
+          <option value="time">Quickest</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <main class="wrap">
+    <div class="legend" aria-hidden="true"><span><i style="background:var(--zaatar)"></i>Protein</span><span><i style="background:var(--saffron)"></i>Carbs</span><span><i style="background:var(--sumac)"></i>Fat</span><span>share of calories</span></div>
+    <ul class="list" id="list"></ul>
+  </main>
+</div>
+
+<article class="detail wrap" id="detail" aria-live="polite"></article>
+
+<script>
+const R=[
+{"id":1,"name":"Lemon-Herb Chicken, Rice & Broccoli","meat":"Chicken","cuisine":"Mediterranean","prep":"Stovetop","time":"30 min","mins":30,"kcal":600,"p":64,"c":57,"f":12,"ing":["250 g chicken breast","60 g basmati rice (dry)","150 g broccoli florets","5 ml olive oil","1 lemon (zest + juice), 2 garlic cloves, 1 tsp dried oregano, 1/2 tsp thyme, salt, pepper"],"steps":["Cook the rice in 120 ml salted water, covered, 12 min; rest 5 min.","Butterfly the chicken to an even 2 cm. Rub with lemon zest, garlic, oregano, thyme, salt and pepper.","Heat the oil in a pan over medium-high. Cook the chicken 5–6 min per side to 74 °C inside; rest 5 min.","Steam the broccoli 4–5 min.","Slice the chicken, squeeze lemon juice over everything and serve."]},
+{"id":2,"name":"Chicken Shawarma Bowl","meat":"Chicken","cuisine":"Lebanese","prep":"Marinate ahead","time":"25 min + 1 h marinade","mins":25,"kcal":560,"p":67,"c":41,"f":12,"ing":["220 g chicken breast, sliced thin","60 g whole-wheat pita","200 g lettuce, tomato, cucumber, pickles, onion","5 ml olive oil","Marinade: juice of 1/2 lemon, 1 tsp seven-spice, 1/2 tsp each cumin, paprika, turmeric, cinnamon pinch, 2 garlic cloves, salt"],"steps":["Toss the chicken with the marinade; chill 1 h (overnight is better).","Mix the yogurt with 1 grated garlic clove, lemon juice and salt for a light toum-style sauce.","Heat the oil in a pan over high heat. Cook the chicken 6–8 min until charred at the edges.","Toast the pita and cut into strips or chips.","Build the bowl: veg, chicken, pickles, pita, garlic sauce on top."],"sauce":["100 g 0% Greek yogurt","1 garlic clove, grated","Lemon juice, salt"]},
+{"id":3,"name":"Chicken Fajita Wrap","meat":"Chicken","cuisine":"Mexican","prep":"Quick","time":"20 min","mins":20,"kcal":630,"p":63,"c":48,"f":20,"ing":["200 g chicken breast, cut in strips","1 large whole-wheat tortilla (~70 g)","150 g bell peppers and red onion, sliced","30 g light mozzarella or light cheddar, grated","5 ml olive oil","1 tsp each smoked paprika, cumin, chili powder, garlic powder; lime, salt"],"steps":["Toss the chicken with the spices, salt and a squeeze of lime.","Heat the oil over high heat. Cook the chicken 5–6 min; push aside and char the peppers and onion 4 min.","Warm the tortilla in a dry pan 20 s per side.","Fill with chicken, veg, cheese, salsa and yogurt. Roll tight.","Optional: toast seam-side down 1 min to seal."],"sauce":["40 g salsa","30 g 0% Greek yogurt"]},
+{"id":4,"name":"Shish Taouk with Rice","meat":"Chicken","cuisine":"Lebanese","prep":"Marinate ahead","time":"30 min + 2 h marinade","mins":30,"kcal":590,"p":65,"c":53,"f":11,"ing":["220 g chicken breast, 3 cm cubes","50 g basmati rice (dry)","150 g bell pepper, onion and cherry tomatoes, in chunks","5 ml olive oil","Marinade: 50 g 0% Greek yogurt, 10 g tomato paste, juice of 1/2 lemon, 3 garlic cloves, 1 tsp paprika, 1/2 tsp seven-spice, 1/2 tsp oregano, salt"],"steps":["Mix the marinade with the oil, coat the chicken and chill at least 2 h (overnight is best).","Thread the chicken onto skewers, alternating with pepper, onion and tomato.","Cook the rice in 100 ml salted water, covered, 12 min.","Grill, broil or air-fry the skewers at high heat 12–15 min, turning, until charred and 74 °C inside.","Serve over rice with the garlic sauce, pickles and a squeeze of lemon."],"sauce":["50 g 0% Greek yogurt","1 garlic clove, grated","Lemon juice, salt"]},
+{"id":5,"name":"Chicken & Batata Harra Tray Bake","meat":"Chicken","cuisine":"Lebanese","prep":"Oven","time":"40 min","mins":40,"kcal":600,"p":59,"c":56,"f":14,"ing":["230 g chicken breast, cut in chunks","300 g potatoes, 2 cm cubes","100 g red bell pepper, in strips","8 ml olive oil","1 tsp paprika, 1/2 tsp seven-spice, salt"],"steps":["Heat the oven to 220 °C.","Toss the potatoes with half the oil, paprika and salt; roast 20 min.","Toss the chicken and pepper with the rest of the oil, seven-spice and salt. Add to the tray.","Roast 18–20 min more until the chicken hits 74 °C and the potatoes are crisp.","Mash the garlic, coriander and chili with a pinch of salt; toss through the hot tray with the lemon juice."],"sauce":["4 garlic cloves","A handful of fresh coriander","1 tsp chili flakes (or 1 fresh chili)","1/2 lemon"],"sauceName":"Dressing"},
+{"id":6,"name":"Creamy Tomato Chicken Pasta","meat":"Chicken","cuisine":"Italian","prep":"Stovetop","time":"25 min","mins":25,"kcal":620,"p":61,"c":65,"f":11,"ing":["200 g chicken breast, diced","70 g penne or fusilli (dry)","60 g baby spinach","Cooking spray","Fresh basil, salt, pepper"],"steps":["Boil the pasta in salted water; save 60 ml of the water before draining.","Spray a pan, cook the chicken over medium-high 6–7 min; season.","Add garlic 30 s, then passata and herbs; simmer 5 min.","Stir in the cream cheese until smooth, then the spinach until wilted.","Toss in the pasta, loosen with pasta water, finish with basil."],"sauce":["200 g passata","40 g light cream cheese","2 garlic cloves, 1 tsp Italian herbs, chili flakes"]},
+{"id":7,"name":"Chicken Caesar Salad","meat":"Chicken","cuisine":"Classic","prep":"Quick","time":"20 min","mins":20,"kcal":570,"p":68,"c":33,"f":17,"ing":["200 g chicken breast","150 g romaine lettuce","100 g cherry tomatoes","20 g parmesan, shaved","50 g wholegrain bread, cubed (croutons)"],"steps":["Season the chicken; grill or pan-cook 5–6 min per side to 74 °C. Rest and slice.","Bake the bread cubes at 200 °C for 8 min (or dry-toast in a pan).","Blend or whisk the dressing; thin with a splash of water.","Toss the romaine and tomatoes with the dressing.","Top with chicken, croutons and parmesan."],"sauce":["80 g 0% Greek yogurt","5 ml olive oil","1 tsp Dijon","1/2 lemon","1 garlic clove","1 anchovy (optional), pepper"],"sauceName":"Dressing"},
+{"id":8,"name":"Chicken Tikka with Basmati","meat":"Chicken","cuisine":"Indian","prep":"Marinate ahead","time":"30 min + 1 h marinade","mins":30,"kcal":600,"p":64,"c":58,"f":11,"ing":["220 g chicken breast, chunks","80 g 0% Greek yogurt","55 g basmati rice (dry)","5 ml olive oil","2 garlic cloves, 1 tsp grated ginger, 2 tsp garam masala, 1 tsp each paprika, cumin, turmeric, chili to taste, lemon, fresh coriander, salt"],"steps":["Mix the yogurt, lemon, half the spices, garlic and ginger. Coat the chicken; chill 1 h+.","Cook the rice in 110 ml salted water, covered, 12 min.","Grill the chicken under high heat (or air-fry at 200 °C) 12–14 min, turning once, until charred.","Meanwhile, soften the onion in the oil 5 min, add the rest of the spices 30 s, then tomatoes; simmer 8 min.","Stir the chicken into the sauce 2 min. Serve over rice with coriander."],"sauce":["80 g onion, diced","150 g chopped tomatoes (canned)"]},
+{"id":9,"name":"Lean Beef Burrito Bowl","meat":"Beef","cuisine":"Mexican","prep":"Stovetop","time":"25 min","mins":25,"kcal":590,"p":56,"c":63,"f":11,"ing":["200 g 5%-fat beef mince","50 g rice (dry)","80 g canned black beans, drained","50 g sweetcorn","Shredded lettuce, lime, fresh coriander","1 tsp each cumin, smoked paprika, chili powder, 1/2 tsp oregano, garlic powder, salt"],"steps":["Cook the rice in 100 ml salted water, covered, 12 min; stir in lime juice and coriander.","Brown the mince in a dry non-stick pan over high heat 6–7 min, breaking it up.","Add the spices and 50 ml water; simmer 3 min until saucy.","Warm the beans and corn in the same pan 2 min.","Build the bowl: lettuce, rice, beef, beans and corn, salsa, yogurt."],"sauce":["60 g salsa","40 g 0% Greek yogurt (sour cream swap)"]},
+{"id":10,"name":"Lebanese Beeftek with Garlic Potatoes","meat":"Beef","cuisine":"Lebanese","prep":"Stovetop","time":"30 min + 1 h marinade","mins":30,"kcal":580,"p":63,"c":49,"f":14,"ing":["220 g lean beef (topside or sirloin), sliced into thin 5 mm steaks","250 g potatoes, cut into wedges","100 g lettuce, tomato and pickles","8 ml olive oil (5 ml potatoes, 3 ml pan)","Marinade: 4 garlic cloves crushed, juice of 1 lemon, 1 tsp seven-spice, 1/2 tsp black pepper, 1/2 tsp paprika, salt"],"steps":["Pound the beef slices thin between cling film. Coat in the marinade; chill 1 h (up to overnight).","Toss the wedges with 5 ml oil and salt; bake at 220 °C for 30–35 min (or air-fry 200 °C, 20 min).","Mix the yogurt with 1 grated garlic clove, lemon and salt.","Heat a pan until smoking with 3 ml oil. Sear the beeftek 60–90 s per side in batches; pour the pan juices over.","Serve with the potatoes, garlic sauce, pickles, tomato and lettuce."],"sauce":["60 g 0% Greek yogurt","1 garlic clove, grated","Lemon juice, salt"],"sauceName":"Garlic sauce"},
+{"id":11,"name":"Chicken Fatteh","meat":"Chicken","cuisine":"Lebanese","prep":"Stovetop","time":"30 min","mins":30,"kcal":621,"p":68,"c":46,"f":17,"ing":["190 g chicken breast","100 g canned chickpeas, drained","40 g pita, cut in squares","8 g pine nuts","3 ml olive oil","1 tsp cumin, 1/2 tsp seven-spice, parsley, paprika, salt"],"steps":["Poach the chicken in salted water with the seven-spice 15 min; rest, then shred.","Bake the pita squares at 200 °C for 6–8 min until crisp.","Warm the chickpeas with cumin and a splash of the poaching water.","Whisk the yogurt with crushed garlic, lemon and salt.","Toast the pine nuts in the oil 1–2 min until golden.","Layer pita, chickpeas, chicken and yogurt; top with pine nuts, paprika and parsley."],"sauce":["120 g 0% Greek yogurt","2 garlic cloves, crushed","1/2 lemon, salt"]},
+{"id":12,"name":"Thai Basil Chicken (Pad Krapow)","meat":"Chicken","cuisine":"Thai","prep":"Quick","time":"20 min","mins":20,"kcal":630,"p":61,"c":61,"f":14,"ing":["230 g chicken breast, finely chopped or minced","65 g jasmine rice (dry)","150 g green beans and red chili, chopped","7 ml vegetable oil","3 garlic cloves, a big handful of basil"],"steps":["Cook the rice in 130 ml water, covered, 12 min.","Heat the oil in a wok until smoking. Fry the garlic and chili 20 s.","Add the chicken; stir-fry 4–5 min, breaking it up, until it starts to brown.","Add the green beans, soy, oyster and fish sauce; toss 2 min.","Kill the heat, fold in the basil and serve over rice."],"sauce":["15 ml light soy sauce","10 g oyster sauce","1 tsp fish sauce","1/2 tsp sugar substitute (optional)"]},
+{"id":13,"name":"Chicken Smash Burger","meat":"Chicken","cuisine":"Classic","prep":"Quick","time":"20 min","mins":20,"kcal":518,"p":63,"c":36,"f":13,"ing":["200 g chicken breast, minced","1 whole-wheat bun (~70 g)","20 g light mozzarella or light cheese slice","120 g lettuce, tomato, red onion, pickles","3 ml olive oil","1/2 tsp smoked paprika, 1/2 tsp garlic powder, salt, pepper"],"steps":["Mix the mince with paprika, garlic powder, salt and pepper; shape into 2 balls.","Heat the oil in a heavy pan until very hot. Smash each ball flat with a spatula.","Cook 3 min, flip, top with cheese, cook 2–3 min more to 74 °C.","Mix the yogurt with sriracha; toast the bun.","Stack bun, sauce, lettuce, patties, tomato, onion and pickles."],"sauce":["40 g 0% Greek yogurt","1 tsp sriracha"]},
+{"id":15,"name":"Freekeh with Chicken","meat":"Chicken","cuisine":"Lebanese","prep":"Stovetop","time":"45 min","mins":45,"kcal":628,"p":66,"c":51,"f":18,"ing":["220 g chicken breast","60 g freekeh (dry), rinsed","60 g onion, diced","7 ml olive oil","5 g pine nuts","1 cinnamon stick, 1/2 tsp seven-spice, 1/2 tsp cumin, salt, pepper"],"steps":["Simmer the chicken with the cinnamon stick in 500 ml salted water 15 min; keep the broth, shred the chicken.","Soften the onion in the oil 5 min; add the freekeh and spices, toast 1 min.","Add 200 ml of the broth; cover and simmer 20–25 min until tender.","Toast the pine nuts in a dry pan.","Spoon the freekeh onto a plate, top with chicken and pine nuts; serve with the yogurt."],"sauce":["60 g 0% Greek yogurt, to serve"]},
+{"id":16,"name":"Chicken Kafta & Tabbouleh","meat":"Chicken","cuisine":"Lebanese","prep":"Stovetop","time":"30 min","mins":30,"kcal":603,"p":61,"c":57,"f":15,"ing":["220 g chicken breast, minced","30 g onion, grated","40 g fine bulgur (dry)","150 g tomato, diced","80 g parsley, mint and cucumber","8 ml olive oil","30 g pita","Juice of 1 lemon, 1/2 tsp seven-spice, salt, pepper"],"steps":["Soak the bulgur in the lemon juice and tomato for 15 min.","Mix the chicken with the onion, seven-spice, salt and some chopped parsley; shape into 4 flat kaftas.","Grill or pan-fry the kaftas with 3 ml oil, 4 min per side.","Chop the parsley, mint and cucumber fine; toss with the bulgur and 5 ml oil.","Serve the kafta in pita with the tabbouleh on the side."]},
+{"id":18,"name":"Chicken Quesadilla","meat":"Chicken","cuisine":"Mexican","prep":"Quick","time":"20 min","mins":20,"kcal":575,"p":66,"c":43,"f":14,"ing":["200 g chicken breast, diced","1 large whole-wheat tortilla (~70 g)","40 g light mozzarella, grated","100 g peppers and onion, sliced","1 tsp each cumin, smoked paprika, chili powder; lime, salt"],"steps":["Season the chicken with the spices and salt; cook in a dry non-stick pan 6 min.","Add the peppers and onion; cook 3 min more.","Lay the tortilla flat, cover half with cheese, chicken and veg; fold over.","Toast in the dry pan 2–3 min per side until crisp and the cheese melts.","Cut into wedges; serve with salsa and lime yogurt."],"sauce":["50 g salsa","40 g 0% Greek yogurt + a squeeze of lime"]},
+{"id":19,"name":"Pesto Chicken Pasta","meat":"Chicken","cuisine":"Italian","prep":"Stovetop","time":"25 min","mins":25,"kcal":608,"p":61,"c":53,"f":16,"ing":["200 g chicken breast, sliced","65 g penne or fusilli (dry)","100 g cherry tomatoes, halved","50 g baby spinach","10 g parmesan, grated","Garlic, chili flakes, salt, pepper"],"steps":["Boil the pasta in salted water; save a splash of the water.","Cook the chicken in a non-stick pan 6–7 min; season.","Add the tomatoes and garlic 2 min until they soften.","Add the pasta, pesto and spinach with a splash of pasta water; toss until glossy.","Finish with parmesan and chili flakes."],"sauce":["15 g basil pesto"]},
+{"id":20,"name":"Chicken Souvlaki Pita","meat":"Chicken","cuisine":"Greek","prep":"Marinate ahead","time":"25 min + 1 h marinade","mins":25,"kcal":577,"p":66,"c":45,"f":15,"ing":["200 g chicken breast, cubed","1 whole-wheat pita (~70 g)","100 g lettuce and red onion","60 g tomato","20 g light feta","5 ml olive oil","Marinade: 1/2 lemon, 2 garlic cloves, 1 tsp oregano, salt, pepper"],"steps":["Toss the chicken with the oil and marinade; chill 1 h.","Squeeze the cucumber dry; mix with the yogurt, a little garlic and salt.","Thread onto skewers and grill or air-fry 12 min, turning, to 74 °C.","Warm the pita.","Fill with tzatziki, chicken, lettuce, tomato, onion and crumbled feta."],"sauce":["80 g 0% Greek yogurt","50 g cucumber, grated","1 small garlic clove, salt"],"sauceName":"Tzatziki"},
+{"id":21,"name":"Chicken Mushroom Stroganoff","meat":"Chicken","cuisine":"Classic","prep":"Stovetop","time":"30 min","mins":30,"kcal":640,"p":67,"c":57,"f":15,"ing":["220 g chicken breast, in strips","150 g mushrooms, sliced","60 g onion, sliced","55 g rice (dry)","5 ml olive oil","Garlic, parsley, salt, pepper"],"steps":["Cook the rice in 110 ml salted water, covered, 12 min.","Sear the chicken in the oil over high heat 5 min; set aside.","Cook the onion and mushrooms 6 min until browned; add garlic and paprika.","Stir in the cream cheese, Dijon and 60 ml water until smooth; return the chicken 2 min.","Off the heat, stir in the yogurt (so it won't split). Serve over rice with parsley."],"sauce":["30 g light cream cheese","50 g 0% Greek yogurt","1 tsp paprika, 1 tsp Dijon"]},
+{"id":23,"name":"Chicken Fattoush Salad","meat":"Chicken","cuisine":"Lebanese","prep":"Quick","time":"20 min","mins":20,"kcal":535,"p":58,"c":40,"f":15,"ing":["220 g chicken breast","150 g lettuce, purslane, radish and cucumber","100 g tomato","50 g pita, torn","1 tsp sumac, salt"],"steps":["Season the chicken with sumac and salt; grill or pan-cook 5–6 min per side. Rest and slice.","Bake the pita pieces at 200 °C for 6–8 min until crisp.","Whisk the oil, molasses, lemon, garlic, mint and sumac.","Toss the vegetables with the dressing.","Top with chicken and pita chips just before eating."],"sauce":["8 ml olive oil","10 g pomegranate molasses","1/2 lemon, 1 garlic clove, dried mint, pinch of sumac"],"sauceName":"Dressing"},
+{"id":24,"name":"Chicken Kabsa","meat":"Chicken","cuisine":"Gulf","prep":"Stovetop","time":"40 min","mins":40,"kcal":639,"p":59,"c":60,"f":17,"ing":["220 g chicken breast, large chunks","60 g basmati rice (dry), rinsed","60 g onion, diced","80 g tomato, grated","40 g carrot, grated","7 ml olive oil","8 g slivered almonds","1 tsp kabsa spice (or baharat), 1 dried lime or a squeeze of lemon, garlic, salt"],"steps":["Brown the chicken in the oil 4 min; remove.","Cook the onion and garlic 4 min, add the tomato, carrot and spices, cook 3 min.","Add the rice, dried lime and 140 ml water; sit the chicken on top.","Cover and cook on low 18 min; rest 5 min.","Toast the almonds and scatter over the rice."]},
+{"id":28,"name":"Kafta bil Saynieh","meat":"Beef","cuisine":"Lebanese","prep":"Oven","time":"50 min","mins":50,"kcal":558,"p":49,"c":53,"f":16,"ing":["200 g 5%-fat beef mince","250 g potatoes, sliced","150 g tomatoes, sliced","50 g onion, grated","5 ml olive oil","Parsley, 1 tsp seven-spice, salt, pepper"],"steps":["Heat the oven to 200 °C. Toss the potato slices with the oil and salt; roast 15 min.","Mix the mince with onion, parsley, seven-spice, salt and pepper.","Press the kafta into a thin layer in a small dish, or shape into fingers.","Layer the potatoes and tomatoes on top; pour over the tomato paste loosened with 100 ml water.","Cover with foil and bake 20 min, then uncover and bake 10 min."],"sauce":["1 tbsp tomato paste","100 ml water"]},
+{"id":29,"name":"Beef & Broccoli Rice Bowl","meat":"Beef","cuisine":"Thai","prep":"Quick","time":"20 min","mins":20,"kcal":636,"p":54,"c":66,"f":17,"ing":["200 g sirloin, thinly sliced","55 g rice (dry)","200 g broccoli florets","5 ml sesame oil","Sesame seeds"],"steps":["Cook the rice in 110 ml salted water, covered, 12 min.","Toss the beef with half the cornstarch and a little soy.","Mix the rest of the soy, honey, cornstarch, garlic, ginger and 60 ml water.","Sear the beef in the oil in a very hot wok 2 min; remove. Stir-fry the broccoli 3 min with a splash of water.","Return the beef, add the sauce and toss 1 min until glossy. Serve over rice with sesame."],"sauce":["20 ml light soy sauce","8 g honey","5 g cornstarch","2 garlic cloves, 1 tsp grated ginger","60 ml water"]},
+{"id":30,"name":"Lean Beef Bolognese","meat":"Beef","cuisine":"Italian","prep":"Stovetop","time":"35 min","mins":35,"kcal":634,"p":55,"c":69,"f":13,"ing":["180 g 5%-fat beef mince","70 g spaghetti (dry)","10 g parmesan, grated","Basil, salt, pepper"],"steps":["Brown the mince in a dry non-stick pan over high heat 6 min.","Add the onion, carrot and celery; cook 5 min. Add garlic 30 s.","Pour in the passata and oregano; simmer 15–20 min.","Boil the spaghetti; toss with the sauce and a splash of pasta water.","Top with parmesan and basil."],"sauce":["200 g passata","60 g onion, diced","50 g carrot and celery, diced","2 garlic cloves, 1 tsp oregano"]}
+];
+const state={meat:"all",sort:"order"};
+let store={checks:{},serv:{}};
+try{const s=localStorage.getItem("hprb-v1");if(s)store=Object.assign(store,JSON.parse(s))}catch(e){}
+const save=()=>{try{localStorage.setItem("hprb-v1",JSON.stringify(store))}catch(e){}};
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const meatColor=m=>m==="Beef"?"var(--beef)":"var(--chicken)";
+const tags=r=>`<span class="tag meat"><span class="dot" style="background:${meatColor(r.meat)}"></span>${r.meat}</span><span class="tag c-${({Greek:"Mediterranean",Levantine:"Lebanese",Gulf:"Indian"})[r.cuisine]||r.cuisine}">${r.cuisine}</span><span class="tag prep">${r.prep}</span>`;
+const band=r=>{const P=r.p*4,C=r.c*4,F=r.f*9,T=P+C+F;return `<div class="band" role="img" aria-label="Calories: ${Math.round(P/T*100)}% protein, ${Math.round(C/T*100)}% carbs, ${Math.round(F/T*100)}% fat"><span style="width:${P/T*100}%"></span><span style="width:${C/T*100}%"></span><span style="width:${F/T*100}%"></span></div>`};
+
+document.querySelectorAll("[data-meat]").forEach(b=>b.addEventListener("click",()=>{state.meat=b.dataset.meat;document.querySelectorAll("[data-meat]").forEach(x=>x.setAttribute("aria-pressed",x===b));renderList()}));
+document.getElementById("sort").addEventListener("change",e=>{state.sort=e.target.value;renderList()});
+
+function visible(){
+  let r=R.filter(x=>state.meat==="all"||x.meat===state.meat);
+  const s=state.sort;
+  if(s==="p")r.sort((a,b)=>b.p-a.p);else if(s==="kcal")r.sort((a,b)=>a.kcal-b.kcal);else if(s==="ratio")r.sort((a,b)=>b.p/b.kcal-a.p/a.kcal);else if(s==="time")r.sort((a,b)=>a.mins-b.mins||a.id-b.id);
+  return r;
+}
+function renderList(){
+  const r=visible(),el=document.getElementById("list");
+  if(!r.length){el.innerHTML=`<li class="empty">No recipes match these filters.<br><button type="button" id="clear">Clear filters</button></li>`;
+    document.getElementById("clear").onclick=()=>{state.meat="all";document.querySelectorAll("[data-meat]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.meat==="all"));renderList()};return}
+  el.innerHTML=r.map(x=>`<li class="item"><a href="#r${x.id}"><div class="prot num">${x.p}g<small>protein</small></div><div><p class="name">${esc(x.name)}</p><div class="tags">${tags(x)}</div>${band(x)}</div><div class="kcal num">${x.kcal} <span class="u">kcal</span><small>${x.time.replace(/ \+.*/,"")}</small></div></a></li>`).join("");
+}
+
+// scaling
+function fmt(v){
+  if(Math.abs(v-Math.round(v))<.01)return String(Math.round(v));
+  if(v>=10)return String(Math.round(v));
+  const w=Math.floor(v),fr=v-w,map=[[.25,"¼"],[.5,"½"],[.75,"¾"],[1/3,"⅓"],[2/3,"⅔"]];
+  for(const [k,s] of map)if(Math.abs(fr-k)<.04)return (w?w:"")+s;
+  return v.toFixed(1).replace(/\.0$/,"");
+}
+function scaleIng(t,n){
+  return esc(t).replace(/(?<![\d\/.])(\d+\/\d+|\d+(?:\.\d+)?)(?![\d\/.])(?!\s*(?:%|°|cm\b|mm\b|h\b|min\b|s\b|-))/g,(m,q)=>{
+    const v=q.includes("/")?q.split("/").reduce((a,b)=>a/b):parseFloat(q);
+    const out=n===1?(q==="1/2"?"½":q):fmt(v*n);
+    return `<span class="qty">${out}</span>`;
+  });
+}
+const scaleStep=(t,n)=>esc(t).replace(/(\d+)(\s?ml)/g,(m,q,u)=>`<span class="qty">${fmt(q*n)}</span>${u}`);
+
+function renderDetail(id){
+  const r=R.find(x=>x.id===id);if(!r)return false;
+  const n=store.serv[id]||1,ck=store.checks[id]||{};
+  const i=R.indexOf(r),prev=R[i-1],next=R[i+1];
+  document.title=r.name+" · High-Protein Recipe Book";
+  const d=document.getElementById("detail");
+  d.innerHTML=`
+  <button class="back" type="button" id="back">← All recipes</button>
+  <h2>${esc(r.name)}</h2>
+  <div class="dmeta">${tags(r)}<span class="time">${r.time}</span></div>
+  <div class="macros num">
+    <div class="p"><b>${Math.round(r.p*n)}g</b><span>protein${n>1?" total":""}</span></div>
+    <div><b>${Math.round(r.kcal*n)}</b><span>kcal${n>1?" total":""}</span></div>
+    <div><b>${Math.round(r.c*n)}g</b><span>carbs</span></div>
+    <div><b>${Math.round(r.f*n)}g</b><span>fat</span></div>
+  </div>
+  ${band(r)}
+  <div class="servings">
+    <div class="stepper"><button type="button" id="minus" aria-label="Fewer portions" ${n<=1?"disabled":""}>−</button><output aria-live="polite">${n} ${n===1?"portion":"portions"}</output><button type="button" id="plus" aria-label="More portions" ${n>=6?"disabled":""}>+</button></div>
+    <p>${n>1?`Batch for meal prep: ${n} × ${r.kcal} kcal, ${r.p} g protein each.`:"Scale up to batch-cook for the week."}</p>
+  </div>
+  <div class="cols">
+    <section><h3>Ingredients <small>raw / dry weights</small></h3>
+      <ul class="checks">${r.ing.map((t,k)=>`<li><label><input type="checkbox" data-k="i${k}" ${ck["i"+k]?"checked":""}><span>${scaleIng(t,n)}</span></label></li>`).join("")}</ul>
+      ${r.sauce?`<h3 class="sub">${r.sauceName||"Sauce"}</h3><ul class="checks">${r.sauce.map((t,k)=>`<li><label><input type="checkbox" data-k="x${k}" ${ck["x"+k]?"checked":""}><span>${scaleIng(t,n)}</span></label></li>`).join("")}</ul>`:""}
+    </section>
+    <section><h3>Method <small>tap a step when done</small></h3>
+      <ol class="checks steps" style="padding:0">${r.steps.map((t,k)=>`<li><label><input type="checkbox" data-k="s${k}" ${ck["s"+k]?"checked":""}><span class="n">${k+1}</span><span class="txt">${scaleStep(t,n)}</span></label></li>`).join("")}</ol>
+      <button class="reset" type="button" id="reset">Reset checklist</button>
+    </section>
+  </div>
+  <p class="note">Macros are estimated from standard food values. Log your actual brands in your tracker; yogurt, bread and mince vary most. Spices, herbs, garlic and lemon count as negligible.</p>
+  <nav class="pager" aria-label="More recipes">${prev?`<a href="#r${prev.id}"><small>Previous</small>${esc(prev.name)}</a>`:"<span></span>"}${next?`<a href="#r${next.id}"><small>Next</small>${esc(next.name)}</a>`:""}</nav>`;
+  d.querySelector("#back").onclick=()=>{location.hash=""};
+  const setN=v=>{store.serv[id]=v;save();renderDetail(id)};
+  d.querySelector("#minus").onclick=()=>setN(Math.max(1,n-1));
+  d.querySelector("#plus").onclick=()=>setN(Math.min(6,n+1));
+  d.querySelectorAll("input[data-k]").forEach(inp=>inp.onchange=()=>{store.checks[id]=store.checks[id]||{};store.checks[id][inp.dataset.k]=inp.checked;save()});
+  d.querySelector("#reset").onclick=()=>{store.checks[id]={};save();renderDetail(id)};
+  return true;
+}
+let lastScroll=0;
+function route(){
+  const m=location.hash.match(/^#r(\d+)$/);
+  if(m&&renderDetail(+m[1])){if(!document.body.classList.contains("show-detail"))lastScroll=scrollY;document.body.classList.add("show-detail");scrollTo(0,0)}
+  else{document.body.classList.remove("show-detail");document.title="High-Protein Recipe Book";scrollTo(0,lastScroll)}
+}
+addEventListener("hashchange",route);
+
+// theme toggle
+const tb=document.getElementById("theme");
+const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
+const syncTheme=()=>{tb.textContent=isDark()?"Light":"Dark"};
+try{const t=localStorage.getItem("hprb-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}
+tb.onclick=()=>{const t=isDark()?"light":"dark";document.documentElement.dataset.theme=t;try{localStorage.setItem("hprb-theme",t)}catch(e){}syncTheme()};
+syncTheme();
+
+{const k=R.map(x=>x.kcal),q=R.map(x=>x.p),b=R.filter(x=>x.meat==="Beef").length;document.getElementById("lede").textContent=`${R.length} single-serving meals, ${Math.min(...k)}–${Math.max(...k)} kcal and ${Math.min(...q)}–${Math.max(...q)} g protein each: ${R.length-b} chicken, ${b} beef. Tap a recipe to scale it and cook along.`}
+renderList();route();
+</script>
+</body>
+</html>
